@@ -3,17 +3,17 @@ title: 'Third post'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 22 2022'
 heroImage: '../../assets/blog-placeholder-2.jpg'
-location: 'Reykjavík, Iceland'
-country: 'Iceland'
+location: 'Sydney, Australia'
+country: 'Australia'
 gallery:
   - src: '../../assets/blog-placeholder-5.jpg'
-    alt: 'Steam rising off a geothermal pool'
+    alt: 'Harbour at golden hour'
   - src: '../../assets/blog-placeholder-4.jpg'
-    alt: 'Black sand coastline'
+    alt: 'Coastal walk along the cliffs'
   - src: '../../assets/blog-placeholder-1.jpg'
-    alt: 'Waterfall along the ring road'
+    alt: 'Ferry crossing the harbour'
   - src: '../../assets/blog-placeholder-3.jpg'
-    alt: 'Northern lights over the fjord'
+    alt: 'Sunset over the bay'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.

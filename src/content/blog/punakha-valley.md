@@ -1,10 +1,10 @@
 ---
-title: 'Porto in Two Days'
+title: 'Punakha Valley'
 description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Aug 20 2022'
-heroImage: '../../assets/blog-placeholder-1.jpg'
-location: 'Porto, Portugal'
-country: 'Portugal'
+pubDate: 'Sep 10 2022'
+heroImage: '../../assets/blog-placeholder-5.jpg'
+location: 'Punakha, Bhutan'
+country: 'Bhutan'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium.

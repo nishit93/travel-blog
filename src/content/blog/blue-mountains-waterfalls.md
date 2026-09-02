@@ -1,10 +1,10 @@
 ---
-title: 'The Golden Circle'
+title: 'Blue Mountains Waterfalls'
 description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Aug 12 2022'
-heroImage: '../../assets/blog-placeholder-2.jpg'
-location: 'Þingvellir, Iceland'
-country: 'Iceland'
+pubDate: 'Nov 01 2022'
+heroImage: '../../assets/blog-placeholder-4.jpg'
+location: 'Blue Mountains, Australia'
+country: 'Australia'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium.

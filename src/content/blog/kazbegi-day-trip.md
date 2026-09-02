@@ -1,10 +1,10 @@
 ---
-title: 'Osaka Food Crawl'
+title: 'Kazbegi Day Trip'
 description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Sep 10 2022'
-heroImage: '../../assets/blog-placeholder-5.jpg'
-location: 'Osaka, Japan'
-country: 'Japan'
+pubDate: 'Oct 05 2022'
+heroImage: '../../assets/blog-placeholder-3.jpg'
+location: 'Kazbegi, Georgia'
+country: 'Georgia'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium.
