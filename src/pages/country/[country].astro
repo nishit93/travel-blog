@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import PostCard from '../../components/PostCard.astro';
+import { BASE_URL, SITE_TITLE } from '../../consts';
+import { slugify } from '../../utils';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => Boolean(data.country));
+	const countries = [...new Set(posts.map((post) => post.data.country as string))];
+
+	return countries.map((country) => {
+		const countryPosts = posts
+			.filter((post) => post.data.country === country)
+			.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+		return {
+			params: { country: slugify(country) },
+			props: { country, posts: countryPosts },
+		};
+	});
+}
+
+const { country, posts } = Astro.props;
+const base = BASE_URL;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${country} · ${SITE_TITLE}`} description={`Stories from ${country}.`} />
+		<style>
+			main {
+				width: 100%;
+				max-width: 1080px;
+			}
+			.page-head {
+				padding: 3.5rem 0 2.5rem;
+				border-bottom: 1px solid rgba(var(--black), 8%);
+				margin-bottom: 2.5rem;
+			}
+			.back-link {
+				display: inline-block;
+				font-family: var(--font-mono);
+				font-size: 0.85rem;
+				text-decoration: none;
+				margin-bottom: 1rem;
+			}
+			.page-head h1 {
+				font-size: clamp(2rem, 4vw, 2.6rem);
+				margin: 0;
+			}
+			.post-grid {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.6rem;
+				padding-bottom: 4rem;
+			}
+			.post-grid > :global(.post-card:first-child) {
+				grid-column: 1 / -1;
+			}
+			@media (max-width: 720px) {
+				.post-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-head">
+				<a class="back-link" href={`${base}blog/`}>← All stories</a>
+				<p class="eyebrow">Destination</p>
+				<h1>{country}</h1>
+			</div>
+			<div class="post-grid">
+				{
+					posts.map((post, i) => (
+						<PostCard
+							href={`${base}blog/${post.id}/`}
+							title={post.data.title}
+							description={post.data.description}
+							pubDate={post.data.pubDate}
+							heroImage={post.data.heroImage}
+							location={post.data.location}
+							large={i === 0}
+							imageAspect={i === 0 ? '21 / 9' : '4 / 3'}
+						/>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

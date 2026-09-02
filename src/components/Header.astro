@@ -1,8 +1,13 @@
 ---
+import { getCollection } from 'astro:content';
 import { BASE_URL, SITE_TITLE } from '../consts';
+import { slugify } from '../utils';
 import HeaderLink from './HeaderLink.astro';
 
 const base = BASE_URL;
+
+const posts = await getCollection('blog', ({ data }) => Boolean(data.country));
+const countries = [...new Set(posts.map((post) => post.data.country as string))].sort();
 ---
 
 <header>
@@ -11,6 +16,20 @@ const base = BASE_URL;
 		<div class="internal-links">
 			<HeaderLink href={base}>Home</HeaderLink>
 			<HeaderLink href={`${base}blog/`}>Blog</HeaderLink>
+			{
+				countries.length > 0 && (
+					<details class="countries-dropdown">
+						<summary>Countries</summary>
+						<ul>
+							{countries.map((country) => (
+								<li>
+									<a href={`${base}country/${slugify(country)}/`}>{country}</a>
+								</li>
+							))}
+						</ul>
+					</details>
+				)
+			}
 			<HeaderLink href={`${base}about/`}>About</HeaderLink>
 		</div>
 	</nav>
@@ -47,4 +66,68 @@ const base = BASE_URL;
 		text-decoration: none;
 		border-bottom-color: var(--accent);
 	}
+	.internal-links {
+		display: flex;
+		align-items: center;
+	}
+
+	.countries-dropdown {
+		position: relative;
+		display: inline-block;
+	}
+	.countries-dropdown summary {
+		padding: 1em 0.5em;
+		color: rgb(var(--black));
+		cursor: pointer;
+		list-style: none;
+	}
+	.countries-dropdown summary::-webkit-details-marker {
+		display: none;
+	}
+	.countries-dropdown summary::after {
+		content: '▾';
+		margin-left: 0.3em;
+		font-size: 0.75em;
+	}
+	.countries-dropdown[open] summary::after {
+		content: '▴';
+	}
+	.countries-dropdown ul {
+		position: absolute;
+		top: 100%;
+		left: 0.5em;
+		margin: 0;
+		padding: 0.4em 0;
+		list-style: none;
+		background: var(--surface);
+		border-radius: 8px;
+		box-shadow: var(--box-shadow);
+		min-width: 160px;
+		z-index: 10;
+	}
+	.countries-dropdown li a {
+		display: block;
+		padding: 0.6em 1em;
+		border-bottom: none;
+		white-space: nowrap;
+	}
+	.countries-dropdown li a:hover {
+		color: var(--accent);
+	}
 </style>
+
+<script>
+	document.querySelectorAll<HTMLDetailsElement>('.countries-dropdown').forEach((menu) => {
+		document.addEventListener('click', (e) => {
+			if (!menu.contains(e.target as Node)) menu.open = false;
+		});
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') menu.open = false;
+		});
+		menu.querySelectorAll('a').forEach((link) => {
+			link.addEventListener('click', () => {
+				menu.open = false;
+			});
+		});
+	});
+</script>

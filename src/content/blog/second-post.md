@@ -4,6 +4,7 @@ description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 15 2022'
 heroImage: '../../assets/blog-placeholder-4.jpg'
 location: 'Lisbon, Portugal'
+country: 'Portugal'
 gallery:
   - src: '../../assets/blog-placeholder-2.jpg'
     alt: 'Tiled facades along the riverfront'

@@ -4,6 +4,7 @@ description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 08 2022'
 heroImage: '../../assets/blog-placeholder-3.jpg'
 location: 'Kyoto, Japan'
+country: 'Japan'
 gallery:
   - src: '../../assets/blog-placeholder-1.jpg'
     alt: 'Narrow street in the old town'

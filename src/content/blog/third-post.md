@@ -4,6 +4,7 @@ description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jul 22 2022'
 heroImage: '../../assets/blog-placeholder-2.jpg'
 location: 'Reykjavík, Iceland'
+country: 'Iceland'
 gallery:
   - src: '../../assets/blog-placeholder-5.jpg'
     alt: 'Steam rising off a geothermal pool'

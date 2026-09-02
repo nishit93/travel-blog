@@ -8,12 +8,30 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import PostCard from '../components/PostCard.astro';
 import { BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { slugify } from '../utils';
 
 const base = BASE_URL;
 
-const latestPosts = (await getCollection('blog'))
+const allPosts = await getCollection('blog');
+
+const latestPosts = [...allPosts]
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3);
+
+const countryOrder: string[] = [];
+const countryImages = new Map<string, (typeof allPosts)[number]['data']['heroImage']>();
+for (const post of allPosts) {
+	const country = post.data.country;
+	if (!country) continue;
+	if (!countryImages.has(country)) {
+		countryOrder.push(country);
+		countryImages.set(country, post.data.heroImage);
+	}
+}
+const countries = countryOrder.map((country) => ({
+	country,
+	heroImage: countryImages.get(country),
+}));
 ---
 
 <!doctype html>
@@ -99,8 +117,59 @@ const latestPosts = (await getCollection('blog'))
 				transform: translateY(-1px);
 			}
 
+			.countries {
+				padding: 4rem 1.5em 1rem;
+			}
+			.countries h2 {
+				font-size: 1.9rem;
+				margin: 0 0 1.5rem;
+			}
+			.countries-scroll {
+				display: flex;
+				gap: 1rem;
+				overflow-x: auto;
+				scroll-snap-type: x mandatory;
+				padding-bottom: 0.75rem;
+				scrollbar-width: thin;
+			}
+			.country-card {
+				position: relative;
+				flex: 0 0 210px;
+				height: 270px;
+				border-radius: 14px;
+				overflow: hidden;
+				scroll-snap-align: start;
+				text-decoration: none;
+				transition: transform 0.2s ease;
+			}
+			.country-card:hover {
+				transform: translateY(-3px);
+			}
+			.country-card::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, rgba(20, 14, 10, 0) 40%, rgba(20, 14, 10, 0.7) 100%);
+			}
+			.country-card :global(img) {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 0;
+				display: block;
+			}
+			.country-name {
+				position: absolute;
+				left: 1rem;
+				bottom: 0.9rem;
+				z-index: 1;
+				color: #fff;
+				font-family: var(--font-display);
+				font-size: 1.3rem;
+			}
+
 			.latest {
-				padding: 4.5rem 1.5em 2rem;
+				padding: 3rem 1.5em 2rem;
 			}
 			.section-head {
 				display: flex;
@@ -185,6 +254,23 @@ const latestPosts = (await getCollection('blog'))
 					<a class="hero-cta" href={`${base}blog/`}>Read the latest stories →</a>
 				</div>
 			</section>
+
+			{
+				countries.length > 0 && (
+					<section class="countries wrap">
+						<p class="eyebrow">Browse by destination</p>
+						<h2>Countries</h2>
+						<div class="countries-scroll">
+							{countries.map(({ country, heroImage }) => (
+								<a class="country-card" href={`${base}country/${slugify(country)}/`}>
+									{heroImage && <Image src={heroImage} alt="" width={400} height={500} />}
+									<span class="country-name">{country}</span>
+								</a>
+							))}
+						</div>
+					</section>
+				)
+			}
 
 			<section class="latest wrap">
 				<div class="section-head">
