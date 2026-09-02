@@ -16,6 +16,7 @@ const blog = defineCollection({
 			heroImage: z.optional(image()),
 			location: z.string().optional(),
 			country: z.string().optional(),
+			category: z.enum(['guide', 'tips']).optional(),
 			gallery: z
 				.array(
 					z.object({
