@@ -1,48 +1,229 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import AboutTeaserImage from '../assets/blog-placeholder-about.jpg';
+import HeroImage from '../assets/blog-placeholder-1.jpg';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import PostCard from '../components/PostCard.astro';
+import { BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const base = BASE_URL;
+
+const latestPosts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3);
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 100%;
+				max-width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			.wrap {
+				max-width: 1080px;
+				margin: 0 auto;
+				padding: 0 1.5em;
+			}
+
+			.hero {
+				position: relative;
+				height: min(76vh, 620px);
+				min-height: 420px;
+				overflow: hidden;
+			}
+			.hero :global(.hero-image) {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 0;
+			}
+			.hero-overlay {
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, rgba(20, 14, 10, 0.1) 0%, rgba(20, 14, 10, 0.78) 100%);
+			}
+			.hero-content {
+				position: relative;
+				z-index: 1;
+				height: 100%;
+				max-width: 720px;
+				margin: 0 auto;
+				padding: 0 1.5em 3.5em;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-end;
+				color: #fff;
+			}
+			.hero-content .eyebrow {
+				color: rgba(255, 255, 255, 0.8);
+			}
+			.hero-content h1 {
+				font-size: clamp(2.4rem, 6vw, 3.6rem);
+				color: #fff;
+				margin: 0 0 0.6rem;
+			}
+			.hero-dek {
+				font-size: 1.15rem;
+				color: rgba(255, 255, 255, 0.9);
+				max-width: 56ch;
+				margin: 0 0 1.7rem;
+				line-height: 1.6;
+			}
+			.hero-cta {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				width: fit-content;
+				background: var(--accent);
+				color: #fff;
+				padding: 0.75em 1.4em;
+				border-radius: 999px;
+				text-decoration: none;
+				font-weight: 600;
+				transition:
+					background 0.2s ease,
+					transform 0.2s ease;
+			}
+			.hero-cta:hover {
+				background: var(--accent-dark);
+				transform: translateY(-1px);
+			}
+
+			.latest {
+				padding: 4.5rem 1.5em 2rem;
+			}
+			.section-head {
+				display: flex;
+				align-items: flex-end;
+				justify-content: space-between;
+				gap: 1rem;
+				margin-bottom: 2rem;
+				flex-wrap: wrap;
+			}
+			.section-head h2 {
+				font-size: 1.9rem;
+				margin: 0;
+			}
+			.view-all {
+				font-family: var(--font-mono);
+				font-size: 0.85rem;
+				text-decoration: none;
+				white-space: nowrap;
+			}
+			.post-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.6rem;
+			}
+			@media (max-width: 860px) {
+				.post-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			.about-teaser {
+				display: flex;
+				align-items: center;
+				gap: 2.5rem;
+				padding: 4rem 1.5em 5rem;
+			}
+			.about-photo-wrap {
+				flex-shrink: 0;
+				width: 200px;
+				height: 200px;
+				border-radius: 50%;
+				overflow: hidden;
+			}
+			.about-photo-wrap :global(img) {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 0;
+			}
+			.about-teaser h2 {
+				font-size: 1.7rem;
+				margin: 0 0 0.6rem;
+			}
+			.about-teaser p {
+				color: rgb(var(--gray-dark));
+				max-width: 52ch;
+				margin: 0 0 1rem;
+			}
+			.about-teaser a {
+				font-family: var(--font-mono);
+				font-size: 0.85rem;
+			}
+			@media (max-width: 620px) {
+				.about-teaser {
+					flex-direction: column;
+					text-align: center;
+					gap: 1.5rem;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="hero">
+				<Image src={HeroImage} alt="" width={1600} height={1000} class="hero-image" />
+				<div class="hero-overlay"></div>
+				<div class="hero-content">
+					<p class="eyebrow">Travel journal</p>
+					<h1>{SITE_TITLE}</h1>
+					<p class="hero-dek">{SITE_DESCRIPTION}</p>
+					<a class="hero-cta" href={`${base}blog/`}>Read the latest stories →</a>
+				</div>
+			</section>
+
+			<section class="latest wrap">
+				<div class="section-head">
+					<div>
+						<p class="eyebrow">Recently published</p>
+						<h2>Latest stories</h2>
+					</div>
+					<a class="view-all" href={`${base}blog/`}>View all posts →</a>
+				</div>
+				<div class="post-grid">
+					{
+						latestPosts.map((post) => (
+							<PostCard
+								href={`${base}blog/${post.id}/`}
+								title={post.data.title}
+								description={post.data.description}
+								pubDate={post.data.pubDate}
+								heroImage={post.data.heroImage}
+								location={post.data.location}
+							/>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="about-teaser wrap">
+				<div class="about-photo-wrap">
+					<Image src={AboutTeaserImage} alt="" width={400} height={400} />
+				</div>
+				<div>
+					<p class="eyebrow">Who's writing</p>
+					<h2>Hi, I'm Nishit Jain</h2>
+					<p>
+						This is where I write up the trips as they happen — the places worth the detour, the
+						food worth the wait, and the things I'd do differently next time.
+					</p>
+					<a href={`${base}about/`}>More about me →</a>
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>

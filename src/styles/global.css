@@ -20,6 +20,7 @@
 		0 16px 32px rgba(var(--gray), 33%);
 	--font-display: 'Bricolage Grotesque', Georgia, 'Times New Roman', serif;
 	--font-body: 'Source Sans 3', -apple-system, 'Segoe UI', sans-serif;
+	--font-mono: 'Space Mono', 'SFMono-Regular', Consolas, monospace;
 }
 body {
 	font-family: var(--font-body);
@@ -127,6 +128,15 @@ hr {
 	main {
 		padding: 1em;
 	}
+}
+
+.eyebrow {
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgb(var(--gray));
+	margin: 0 0 0.6rem;
 }
 
 .sr-only {
