@@ -3,3 +3,8 @@
 
 export const SITE_TITLE = 'Astro Blog';
 export const SITE_DESCRIPTION = 'Welcome to my website!';
+
+// import.meta.env.BASE_URL doesn't reliably end with a slash, so normalize it once here
+export const BASE_URL = import.meta.env.BASE_URL.endsWith('/')
+	? import.meta.env.BASE_URL
+	: `${import.meta.env.BASE_URL}/`;
