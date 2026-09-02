@@ -59,11 +59,11 @@ const {
 			box-shadow 0.2s ease;
 	}
 	.post-card:hover {
-		transform: translateY(-4px);
-		box-shadow: var(--box-shadow);
+		transform: translateY(-3px);
+		box-shadow: 0 10px 24px rgba(var(--black), 10%);
 	}
 	.post-card:hover .card-title {
-		color: var(--accent);
+		color: var(--accent-dark);
 	}
 	.card-image {
 		overflow: hidden;
@@ -95,7 +95,8 @@ const {
 		color: rgb(var(--gray));
 	}
 	.card-location {
-		color: var(--accent);
+		color: rgb(var(--gray));
+		font-weight: 700;
 	}
 	.card-title {
 		margin: 0;
