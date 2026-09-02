@@ -1,17 +1,41 @@
 ---
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Gallery from '../components/Gallery.astro';
 import Header from '../components/Header.astro';
+import PostCard from '../components/PostCard.astro';
+import Sidebar from '../components/Sidebar.astro';
 import { BASE_URL, SITE_TITLE } from '../consts';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & { id?: string };
 
-const { title, description, pubDate, updatedDate, heroImage, location, gallery } = Astro.props;
+const { id, title, description, pubDate, updatedDate, heroImage, location, country, gallery } =
+	Astro.props;
 const base = BASE_URL;
+
+let previousPost: CollectionEntry<'blog'> | undefined;
+let nextPost: CollectionEntry<'blog'> | undefined;
+let relatedPosts: CollectionEntry<'blog'>[] = [];
+
+if (id) {
+	const allPosts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	);
+	const currentIndex = allPosts.findIndex((post) => post.id === id);
+	if (currentIndex !== -1) {
+		previousPost = allPosts[currentIndex + 1];
+		nextPost = allPosts[currentIndex - 1];
+	}
+	if (country) {
+		relatedPosts = allPosts
+			.filter((post) => post.id !== id && post.data.country === country)
+			.slice(0, 3);
+	}
+}
 ---
 
 <html lang="en">
@@ -36,13 +60,6 @@ const base = BASE_URL;
 				border-radius: 0;
 				display: block;
 			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
 			.back-link {
 				display: inline-block;
 				font-family: var(--font-mono);
@@ -51,8 +68,9 @@ const base = BASE_URL;
 				margin: 2rem 0 1rem;
 			}
 			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
+				max-width: 720px;
+				margin: 0 auto 1em;
+				padding: 1em;
 				text-align: center;
 				line-height: 1;
 			}
@@ -74,6 +92,70 @@ const base = BASE_URL;
 			.last-updated-on {
 				font-style: italic;
 			}
+
+			.content-layout {
+				max-width: 1080px;
+				margin: 0 auto;
+				display: grid;
+				grid-template-columns: 1fr 300px;
+				gap: 2.5rem;
+				padding: 0 1em 4rem;
+			}
+			.prose {
+				color: rgb(var(--gray-dark));
+				min-width: 0;
+			}
+			@media (max-width: 860px) {
+				.content-layout {
+					grid-template-columns: 1fr;
+				}
+			}
+
+			.post-nav {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 1rem;
+				margin: 3rem 0;
+				padding-top: 1.5rem;
+				border-top: 1px solid rgba(var(--black), 8%);
+			}
+			.post-nav a {
+				text-decoration: none;
+				display: flex;
+				flex-direction: column;
+				gap: 0.3rem;
+			}
+			.post-nav .nav-next {
+				text-align: right;
+				grid-column: 2;
+			}
+			.post-nav .nav-label {
+				font-family: var(--font-mono);
+				font-size: 0.72rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: rgb(var(--gray));
+			}
+			.post-nav .nav-title {
+				color: rgb(var(--black));
+				font-family: var(--font-display);
+				font-size: 1.05rem;
+			}
+
+			.related h2 {
+				font-size: 1.4rem;
+				margin: 0 0 1.2rem;
+			}
+			.related-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.2rem;
+			}
+			@media (max-width: 720px) {
+				.related-grid {
+					grid-template-columns: 1fr;
+				}
+			}
 		</style>
 	</head>
 
@@ -88,23 +170,65 @@ const base = BASE_URL;
 						</div>
 					)
 				}
-				<div class="prose">
-					<a class="back-link" href={`${base}blog/`}>← All stories</a>
-					<div class="title">
-						<p class="meta">
-							<FormattedDate date={pubDate} />
-							{location && <span class="location">· {location}</span>}
-						</p>
+				<a class="back-link" href={`${base}blog/`}>← All stories</a>
+				<div class="title">
+					<p class="meta">
+						<FormattedDate date={pubDate} />
+						{location && <span class="location">· {location}</span>}
+					</p>
+					{
+						updatedDate && (
+							<p class="last-updated-on">Last updated on <FormattedDate date={updatedDate} /></p>
+						)
+					}
+					<h1>{title}</h1>
+					<hr />
+				</div>
+				<div class="content-layout">
+					<div class="prose">
+						<slot />
+						{gallery && gallery.length > 0 && <Gallery images={gallery} />}
+
 						{
-							updatedDate && (
-								<p class="last-updated-on">Last updated on <FormattedDate date={updatedDate} /></p>
+							(previousPost || nextPost) && (
+								<nav class="post-nav">
+									{previousPost && (
+										<a class="nav-prev" href={`${base}blog/${previousPost.id}/`}>
+											<span class="nav-label">← Previous post</span>
+											<span class="nav-title">{previousPost.data.title}</span>
+										</a>
+									)}
+									{nextPost && (
+										<a class="nav-next" href={`${base}blog/${nextPost.id}/`}>
+											<span class="nav-label">Next post →</span>
+											<span class="nav-title">{nextPost.data.title}</span>
+										</a>
+									)}
+								</nav>
 							)
 						}
-						<h1>{title}</h1>
-						<hr />
+
+						{
+							relatedPosts.length > 0 && (
+								<section class="related">
+									<h2>You might also like</h2>
+									<div class="related-grid">
+										{relatedPosts.map((post) => (
+											<PostCard
+												href={`${base}blog/${post.id}/`}
+												title={post.data.title}
+												description={post.data.description}
+												pubDate={post.data.pubDate}
+												heroImage={post.data.heroImage}
+												location={post.data.location}
+											/>
+										))}
+									</div>
+								</section>
+							)
+						}
 					</div>
-					<slot />
-					{gallery && gallery.length > 0 && <Gallery images={gallery} />}
+					<Sidebar />
 				</div>
 			</article>
 		</main>

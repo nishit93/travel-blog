@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { BASE_URL, SITE_TITLE } from '../../consts';
+import { groupByRegion, slugify } from '../../utils';
+
+const base = BASE_URL;
+
+const posts = await getCollection('blog', ({ data }) => Boolean(data.country));
+
+const countryImages = new Map<string, (typeof posts)[number]['data']['heroImage']>();
+for (const post of posts) {
+	const country = post.data.country as string;
+	if (!countryImages.has(country)) countryImages.set(country, post.data.heroImage);
+}
+
+const grouped = groupByRegion([...countryImages.keys()]);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Destinations · ${SITE_TITLE}`}
+			description="Every country I've written about, grouped by region."
+		/>
+		<style>
+			main {
+				width: 100%;
+				max-width: 1080px;
+			}
+			.page-head {
+				padding: 3.5rem 0 2.5rem;
+				border-bottom: 1px solid rgba(var(--black), 8%);
+				margin-bottom: 2.5rem;
+			}
+			.page-head h1 {
+				font-size: clamp(2rem, 4vw, 2.6rem);
+				margin: 0 0 0.5rem;
+			}
+			.page-head p {
+				color: rgb(var(--gray-dark));
+				max-width: 60ch;
+				margin: 0;
+			}
+			.region-section {
+				margin-bottom: 3.5rem;
+			}
+			.region-section h2 {
+				font-size: 1.5rem;
+				margin: 0 0 1.4rem;
+			}
+			.country-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.4rem;
+			}
+			@media (max-width: 720px) {
+				.country-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
+			}
+			.country-card {
+				position: relative;
+				display: block;
+				height: 200px;
+				border-radius: 14px;
+				overflow: hidden;
+				text-decoration: none;
+			}
+			.country-card::after {
+				content: '';
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, rgba(20, 14, 10, 0) 40%, rgba(20, 14, 10, 0.7) 100%);
+			}
+			.country-card :global(img) {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 0;
+				display: block;
+			}
+			.country-name {
+				position: absolute;
+				left: 1rem;
+				bottom: 0.8rem;
+				z-index: 1;
+				color: #fff;
+				font-family: var(--font-display);
+				font-size: 1.2rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-head">
+				<p class="eyebrow">Everywhere so far</p>
+				<h1>Destinations</h1>
+				<p>Every country I've written about, grouped by region. Pick one to see the stories.</p>
+			</div>
+			{
+				grouped.map(({ region, countries }) => (
+					<section class="region-section">
+						<h2>{region}</h2>
+						<div class="country-grid">
+							{countries.sort().map((country) => (
+								<a class="country-card" href={`${base}country/${slugify(country)}/`}>
+									{countryImages.get(country) && (
+										<Image src={countryImages.get(country)!} alt="" width={500} height={400} />
+									)}
+									<span class="country-name">{country}</span>
+								</a>
+							))}
+						</div>
+					</section>
+				))
+			}
+		</main>
+		<Footer />
+	</body>
+</html>

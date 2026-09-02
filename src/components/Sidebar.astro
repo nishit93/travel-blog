@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import { BASE_URL } from '../consts';
+import { groupByRegion, slugify } from '../utils';
+
+const base = BASE_URL;
+
+const posts = await getCollection('blog');
+const recentPosts = [...posts]
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 5);
+
+const countryPosts = posts.filter((post) => Boolean(post.data.country));
+const countries = [...new Set(countryPosts.map((post) => post.data.country as string))];
+const grouped = groupByRegion(countries);
+---
+
+<aside class="sidebar">
+	<div class="widget">
+		<h3>Recent Posts</h3>
+		<ul>
+			{
+				recentPosts.map((post) => (
+					<li>
+						<a href={`${base}blog/${post.id}/`}>{post.data.title}</a>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+
+	{
+		grouped.length > 0 && (
+			<div class="widget">
+				<h3>Browse by Country</h3>
+				{grouped.map(({ region, countries: regionCountries }) => (
+					<div class="region-group">
+						<p class="region-label">{region}</p>
+						<ul>
+							{regionCountries.sort().map((country) => (
+								<li>
+									<a href={`${base}country/${slugify(country)}/`}>{country}</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))}
+			</div>
+		)
+	}
+</aside>
+
+<style>
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+	.widget {
+		background: var(--surface);
+		border-radius: 12px;
+		padding: 1.4rem 1.5rem;
+		box-shadow: 0 1px 2px rgba(var(--black), 6%);
+	}
+	.widget h3 {
+		font-size: 1rem;
+		font-family: var(--font-mono);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin: 0 0 1rem;
+		color: rgb(var(--gray));
+	}
+	.widget ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.widget li a {
+		font-size: 0.95rem;
+		line-height: 1.4;
+	}
+	.region-group {
+		margin-bottom: 1.1rem;
+	}
+	.region-group:last-child {
+		margin-bottom: 0;
+	}
+	.region-label {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--accent);
+		margin: 0 0 0.5rem;
+	}
+</style>

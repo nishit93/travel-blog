@@ -1,13 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import { BASE_URL, SITE_TITLE } from '../consts';
-import { slugify } from '../utils';
+import { groupByRegion, slugify } from '../utils';
 import HeaderLink from './HeaderLink.astro';
 
 const base = BASE_URL;
 
 const posts = await getCollection('blog', ({ data }) => Boolean(data.country));
-const countries = [...new Set(posts.map((post) => post.data.country as string))].sort();
+const countries = [...new Set(posts.map((post) => post.data.country as string))];
+const grouped = groupByRegion(countries);
 ---
 
 <header>
@@ -23,16 +24,26 @@ const countries = [...new Set(posts.map((post) => post.data.country as string))]
 			<HeaderLink href={base}>Home</HeaderLink>
 			<HeaderLink href={`${base}blog/`}>Blog</HeaderLink>
 			{
-				countries.length > 0 && (
+				grouped.length > 0 && (
 					<details class="countries-dropdown">
-						<summary>Countries</summary>
-						<ul>
-							{countries.map((country) => (
-								<li>
-									<a href={`${base}country/${slugify(country)}/`}>{country}</a>
-								</li>
+						<summary>Destinations</summary>
+						<div class="dropdown-panel">
+							{grouped.map(({ region, countries: regionCountries }) => (
+								<div class="region-group">
+									<p class="region-label">{region}</p>
+									<ul>
+										{regionCountries.sort().map((country) => (
+											<li>
+												<a href={`${base}country/${slugify(country)}/`}>{country}</a>
+											</li>
+										))}
+									</ul>
+								</div>
 							))}
-						</ul>
+							<a class="all-destinations" href={`${base}destinations/`}>
+								View all destinations →
+							</a>
+						</div>
 					</details>
 				)
 			}
@@ -119,27 +130,52 @@ const countries = [...new Set(posts.map((post) => post.data.country as string))]
 	.countries-dropdown[open] summary::after {
 		content: '▴';
 	}
-	.countries-dropdown ul {
+	.dropdown-panel {
 		position: absolute;
 		top: 100%;
-		left: 0.5em;
+		right: 0;
 		margin: 0;
-		padding: 0.4em 0;
-		list-style: none;
+		padding: 1em;
 		background: var(--surface);
 		border-radius: 8px;
 		box-shadow: var(--box-shadow);
-		min-width: 160px;
+		min-width: 480px;
 		z-index: 10;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.5em 1.5em;
 	}
-	.countries-dropdown li a {
+	.region-group ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.region-label {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--accent);
+		margin: 0 0 0.4em;
+	}
+	.dropdown-panel li a {
 		display: block;
-		padding: 0.6em 1em;
+		padding: 0.35em 0;
 		border-bottom: none;
 		white-space: nowrap;
+		font-size: 0.9rem;
 	}
-	.countries-dropdown li a:hover {
+	.dropdown-panel li a:hover {
 		color: var(--accent);
+	}
+	.all-destinations {
+		grid-column: 1 / -1;
+		margin-top: 0.3em;
+		padding-top: 0.8em;
+		border-top: 1px solid rgba(var(--black), 8%);
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		white-space: nowrap;
 	}
 
 	@media (max-width: 720px) {
@@ -183,15 +219,25 @@ const countries = [...new Set(posts.map((post) => post.data.country as string))]
 			padding: 0.8em 0.2em;
 			border-bottom: 1px solid rgba(var(--black), 8%);
 		}
-		.countries-dropdown ul {
+		.dropdown-panel {
 			position: static;
 			box-shadow: none;
 			border-radius: 0;
-			padding: 0 0 0 1em;
+			padding: 0.5em 0 0.5em 1em;
 			min-width: 0;
+			display: block;
 		}
-		.countries-dropdown li a {
+		.region-group {
+			margin-bottom: 0.8em;
+		}
+		.dropdown-panel li a {
 			border-bottom: 1px solid rgba(var(--black), 8%);
+			padding: 0.6em 0;
+		}
+		.all-destinations {
+			border-top: none;
+			padding-top: 0.4em;
+			display: block;
 		}
 	}
 </style>

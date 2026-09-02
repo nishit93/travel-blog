@@ -4,6 +4,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import PostCard from '../../components/PostCard.astro';
+import Sidebar from '../../components/Sidebar.astro';
 import { BASE_URL, SITE_TITLE } from '../../consts';
 import { slugify } from '../../utils';
 
@@ -51,14 +52,25 @@ const base = BASE_URL;
 				font-size: clamp(2rem, 4vw, 2.6rem);
 				margin: 0;
 			}
+			.content-layout {
+				display: grid;
+				grid-template-columns: 1fr 300px;
+				gap: 2.5rem;
+				padding-bottom: 4rem;
+			}
 			.post-grid {
 				display: grid;
 				grid-template-columns: repeat(2, 1fr);
 				gap: 1.6rem;
-				padding-bottom: 4rem;
+				align-content: start;
 			}
 			.post-grid > :global(.post-card:first-child) {
 				grid-column: 1 / -1;
+			}
+			@media (max-width: 860px) {
+				.content-layout {
+					grid-template-columns: 1fr;
+				}
 			}
 			@media (max-width: 720px) {
 				.post-grid {
@@ -71,25 +83,28 @@ const base = BASE_URL;
 		<Header />
 		<main>
 			<div class="page-head">
-				<a class="back-link" href={`${base}blog/`}>← All stories</a>
+				<a class="back-link" href={`${base}destinations/`}>← All destinations</a>
 				<p class="eyebrow">Destination</p>
 				<h1>{country}</h1>
 			</div>
-			<div class="post-grid">
-				{
-					posts.map((post, i) => (
-						<PostCard
-							href={`${base}blog/${post.id}/`}
-							title={post.data.title}
-							description={post.data.description}
-							pubDate={post.data.pubDate}
-							heroImage={post.data.heroImage}
-							location={post.data.location}
-							large={i === 0}
-							imageAspect={i === 0 ? '21 / 9' : '4 / 3'}
-						/>
-					))
-				}
+			<div class="content-layout">
+				<div class="post-grid">
+					{
+						posts.map((post, i) => (
+							<PostCard
+								href={`${base}blog/${post.id}/`}
+								title={post.data.title}
+								description={post.data.description}
+								pubDate={post.data.pubDate}
+								heroImage={post.data.heroImage}
+								location={post.data.location}
+								large={i === 0}
+								imageAspect={i === 0 ? '21 / 9' : '4 / 3'}
+							/>
+						))
+					}
+				</div>
+				<Sidebar />
 			</div>
 		</main>
 		<Footer />

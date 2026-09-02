@@ -4,6 +4,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
 import PostCard from '../../components/PostCard.astro';
+import Sidebar from '../../components/Sidebar.astro';
 import { BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 
 const base = BASE_URL;
@@ -36,14 +37,25 @@ const posts = (await getCollection('blog')).sort(
 				max-width: 60ch;
 				margin: 0;
 			}
+			.content-layout {
+				display: grid;
+				grid-template-columns: 1fr 300px;
+				gap: 2.5rem;
+				padding-bottom: 4rem;
+			}
 			.post-grid {
 				display: grid;
 				grid-template-columns: repeat(2, 1fr);
 				gap: 1.6rem;
-				padding-bottom: 4rem;
+				align-content: start;
 			}
 			.post-grid > :global(.post-card:first-child) {
 				grid-column: 1 / -1;
+			}
+			@media (max-width: 860px) {
+				.content-layout {
+					grid-template-columns: 1fr;
+				}
 			}
 			@media (max-width: 720px) {
 				.post-grid {
@@ -60,21 +72,24 @@ const posts = (await getCollection('blog')).sort(
 				<h1>All stories</h1>
 				<p>Every trip, in the order it happened.</p>
 			</div>
-			<div class="post-grid">
-				{
-					posts.map((post, i) => (
-						<PostCard
-							href={`${base}blog/${post.id}/`}
-							title={post.data.title}
-							description={post.data.description}
-							pubDate={post.data.pubDate}
-							heroImage={post.data.heroImage}
-							location={post.data.location}
-							large={i === 0}
-							imageAspect={i === 0 ? '21 / 9' : '4 / 3'}
-						/>
-					))
-				}
+			<div class="content-layout">
+				<div class="post-grid">
+					{
+						posts.map((post, i) => (
+							<PostCard
+								href={`${base}blog/${post.id}/`}
+								title={post.data.title}
+								description={post.data.description}
+								pubDate={post.data.pubDate}
+								heroImage={post.data.heroImage}
+								location={post.data.location}
+								large={i === 0}
+								imageAspect={i === 0 ? '21 / 9' : '4 / 3'}
+							/>
+						))
+					}
+				</div>
+				<Sidebar />
 			</div>
 		</main>
 		<Footer />
