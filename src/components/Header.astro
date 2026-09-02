@@ -13,7 +13,13 @@ const countries = [...new Set(posts.map((post) => post.data.country as string))]
 <header>
 	<nav>
 		<h2><a href={base}>{SITE_TITLE}</a></h2>
-		<div class="internal-links">
+		<button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+			<span class="sr-only">Menu</span>
+			<span class="nav-toggle-bar"></span>
+			<span class="nav-toggle-bar"></span>
+			<span class="nav-toggle-bar"></span>
+		</button>
+		<div class="internal-links" id="nav-menu">
 			<HeaderLink href={base}>Home</HeaderLink>
 			<HeaderLink href={`${base}blog/`}>Blog</HeaderLink>
 			{
@@ -40,6 +46,7 @@ const countries = [...new Set(posts.map((post) => post.data.country as string))]
 		padding: 0 1em;
 		background: var(--surface);
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		position: relative;
 	}
 	h2 {
 		margin: 0;
@@ -69,6 +76,26 @@ const countries = [...new Set(posts.map((post) => post.data.country as string))]
 	.internal-links {
 		display: flex;
 		align-items: center;
+	}
+
+	.nav-toggle {
+		display: none;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5px;
+		width: 40px;
+		height: 40px;
+		border: none;
+		background: transparent;
+		cursor: pointer;
+		padding: 0;
+	}
+	.nav-toggle-bar {
+		display: block;
+		width: 22px;
+		height: 2px;
+		background: rgb(var(--black));
+		transition: transform 0.2s ease, opacity 0.2s ease;
 	}
 
 	.countries-dropdown {
@@ -114,9 +141,70 @@ const countries = [...new Set(posts.map((post) => post.data.country as string))]
 	.countries-dropdown li a:hover {
 		color: var(--accent);
 	}
+
+	@media (max-width: 720px) {
+		nav {
+			flex-wrap: wrap;
+			padding: 0.7em 0;
+		}
+		.nav-toggle {
+			display: flex;
+		}
+		.nav-open .nav-toggle-bar:nth-child(2) {
+			transform: translateY(7px) rotate(45deg);
+		}
+		.nav-open .nav-toggle-bar:nth-child(3) {
+			opacity: 0;
+		}
+		.nav-open .nav-toggle-bar:nth-child(4) {
+			transform: translateY(-7px) rotate(-45deg);
+		}
+		.internal-links {
+			display: none;
+			flex-direction: column;
+			align-items: stretch;
+			width: 100%;
+			padding-bottom: 0.8em;
+		}
+		.nav-open .internal-links {
+			display: flex;
+		}
+		.internal-links a {
+			padding: 0.8em 0.2em;
+			border-bottom: 1px solid rgba(var(--black), 8%);
+		}
+		.internal-links a.active {
+			border-bottom: 1px solid rgba(var(--black), 8%);
+		}
+		.countries-dropdown {
+			display: block;
+		}
+		.countries-dropdown summary {
+			padding: 0.8em 0.2em;
+			border-bottom: 1px solid rgba(var(--black), 8%);
+		}
+		.countries-dropdown ul {
+			position: static;
+			box-shadow: none;
+			border-radius: 0;
+			padding: 0 0 0 1em;
+			min-width: 0;
+		}
+		.countries-dropdown li a {
+			border-bottom: 1px solid rgba(var(--black), 8%);
+		}
+	}
 </style>
 
 <script>
+	const nav = document.querySelector('nav');
+	const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+
+	toggle?.addEventListener('click', () => {
+		const isOpen = nav?.classList.toggle('nav-open');
+		toggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
+	});
+
 	document.querySelectorAll<HTMLDetailsElement>('.countries-dropdown').forEach((menu) => {
 		document.addEventListener('click', (e) => {
 			if (!menu.contains(e.target as Node)) menu.open = false;
