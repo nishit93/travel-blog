@@ -98,6 +98,9 @@ img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 8px;
+	/* Astro's stock placeholder images are saturated gradient/noise graphics;
+	   mute them to match the palette until real photos replace them. */
+	filter: saturate(0.45) sepia(0.12) contrast(0.94) brightness(0.98);
 }
 code {
 	padding: 2px 5px;
