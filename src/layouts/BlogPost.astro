@@ -4,12 +4,13 @@ import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import Gallery from '../components/Gallery.astro';
 import Header from '../components/Header.astro';
 import { BASE_URL, SITE_TITLE } from '../consts';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, location } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, location, gallery } = Astro.props;
 const base = BASE_URL;
 ---
 
@@ -102,6 +103,7 @@ const base = BASE_URL;
 						<hr />
 					</div>
 					<slot />
+					{gallery && gallery.length > 0 && <Gallery images={gallery} />}
 				</div>
 			</article>
 		</main>
