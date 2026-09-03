@@ -12,7 +12,23 @@ const recentPosts = [...posts]
 
 const countryPosts = posts.filter((post) => Boolean(post.data.country));
 const countries = [...new Set(countryPosts.map((post) => post.data.country as string))];
-const grouped = groupByRegion(countries);
+
+// India gets its own spotlight in the nav/destinations page, but as a lone
+// unlabeled entry here it reads as an orphan - fold it into Asia for this list.
+const grouped = groupByRegion(countries).reduce<ReturnType<typeof groupByRegion>>(
+	(acc, group) => {
+		if (group.region === 'India') {
+			const asia = acc.find((g) => g.region === 'Asia');
+			if (asia) {
+				asia.countries = [...asia.countries, ...group.countries];
+				return acc;
+			}
+		}
+		acc.push(group);
+		return acc;
+	},
+	[],
+);
 ---
 
 <aside class="sidebar">
