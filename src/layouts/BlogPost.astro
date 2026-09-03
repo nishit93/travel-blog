@@ -185,11 +185,11 @@ if (id) {
 					<h1>{title}</h1>
 					<hr />
 				</div>
-				{id && <PostActions postId={id} url={Astro.url.href} />}
 				<div class="content-layout">
 					<div class="prose">
 						<slot />
 						{gallery && gallery.length > 0 && <Gallery images={gallery} />}
+						{id && <PostActions postId={id} url={Astro.url.href} />}
 
 						{
 							(previousPost || nextPost) && (
