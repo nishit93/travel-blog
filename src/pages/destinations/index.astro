@@ -113,7 +113,7 @@ const grouped = groupByRegion([...countryImages.keys()]);
 									{countryImages.get(country) && (
 										<Image src={countryImages.get(country)!} alt="" width={500} height={400} />
 									)}
-									<span class="country-name">{country}</span>
+									{country !== region && <span class="country-name">{country}</span>}
 								</a>
 							))}
 						</div>

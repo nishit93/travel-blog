@@ -35,7 +35,9 @@ const grouped = groupByRegion(countries);
 				<h3>Browse by Country</h3>
 				{grouped.map(({ region, countries: regionCountries }) => (
 					<div class="region-group">
-						<p class="region-label">{region}</p>
+						{!(regionCountries.length === 1 && regionCountries[0] === region) && (
+							<p class="region-label">{region}</p>
+						)}
 						<ul>
 							{regionCountries.sort().map((country) => (
 								<li>
