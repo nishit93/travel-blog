@@ -40,20 +40,17 @@ const indiaCities = [
 								<div class="region-group">
 									<p class="region-label">{region}</p>
 									<ul>
-										{regionCountries.sort().map((country) => (
-											<li>
-												<a href={`${base}country/${slugify(country)}/`}>{country}</a>
-												{country === 'India' && indiaCities.length > 0 && (
-													<ul class="city-sublist">
-														{indiaCities.map((city) => (
-															<li>
-																<a href={`${base}india/${slugify(city)}/`}>{city}</a>
-															</li>
-														))}
-													</ul>
-												)}
-											</li>
-										))}
+										{region === 'India'
+											? indiaCities.map((city) => (
+													<li>
+														<a href={`${base}india/${slugify(city)}/`}>{city}</a>
+													</li>
+												))
+											: regionCountries.sort().map((country) => (
+													<li>
+														<a href={`${base}country/${slugify(country)}/`}>{country}</a>
+													</li>
+												))}
 									</ul>
 								</div>
 							))}
@@ -184,17 +181,6 @@ const indiaCities = [
 		border-bottom: none;
 		white-space: nowrap;
 		font-size: 0.9rem;
-	}
-	.city-sublist {
-		list-style: none;
-		margin: 0 0 0.2em;
-		padding: 0 0 0 0.9em;
-		border-left: 2px solid rgba(var(--black), 10%);
-	}
-	.city-sublist li a {
-		font-size: 0.82rem;
-		color: rgb(var(--gray));
-		padding: 0.25em 0;
 	}
 	.dropdown-panel li a:hover {
 		color: var(--accent);
