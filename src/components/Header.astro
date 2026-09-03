@@ -9,6 +9,14 @@ const base = BASE_URL;
 const posts = await getCollection('blog', ({ data }) => Boolean(data.country));
 const countries = [...new Set(posts.map((post) => post.data.country as string))];
 const grouped = groupByRegion(countries);
+
+const indiaCities = [
+	...new Set(
+		posts
+			.filter((post) => post.data.country === 'India' && Boolean(post.data.city))
+			.map((post) => post.data.city as string),
+	),
+].sort();
 ---
 
 <header>
@@ -35,6 +43,15 @@ const grouped = groupByRegion(countries);
 										{regionCountries.sort().map((country) => (
 											<li>
 												<a href={`${base}country/${slugify(country)}/`}>{country}</a>
+												{country === 'India' && indiaCities.length > 0 && (
+													<ul class="city-sublist">
+														{indiaCities.map((city) => (
+															<li>
+																<a href={`${base}india/${slugify(city)}/`}>{city}</a>
+															</li>
+														))}
+													</ul>
+												)}
 											</li>
 										))}
 									</ul>
@@ -167,6 +184,17 @@ const grouped = groupByRegion(countries);
 		border-bottom: none;
 		white-space: nowrap;
 		font-size: 0.9rem;
+	}
+	.city-sublist {
+		list-style: none;
+		margin: 0 0 0.2em;
+		padding: 0 0 0 0.9em;
+		border-left: 2px solid rgba(var(--black), 10%);
+	}
+	.city-sublist li a {
+		font-size: 0.82rem;
+		color: rgb(var(--gray));
+		padding: 0.25em 0;
 	}
 	.dropdown-panel li a:hover {
 		color: var(--accent);
