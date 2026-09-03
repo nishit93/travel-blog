@@ -9,7 +9,6 @@ import Gallery from '../components/Gallery.astro';
 import Header from '../components/Header.astro';
 import PostActions from '../components/PostActions.astro';
 import PostCard from '../components/PostCard.astro';
-import Sidebar from '../components/Sidebar.astro';
 import { BASE_URL, SITE_TITLE } from '../consts';
 
 type Props = CollectionEntry<'blog'>['data'] & { id?: string };
@@ -95,21 +94,13 @@ if (id) {
 			}
 
 			.content-layout {
-				max-width: 1080px;
+				max-width: 740px;
 				margin: 0 auto;
-				display: grid;
-				grid-template-columns: 1fr 300px;
-				gap: 2.5rem;
 				padding: 0 1em 4rem;
 			}
 			.prose {
 				color: rgb(var(--gray-dark));
 				min-width: 0;
-			}
-			@media (max-width: 860px) {
-				.content-layout {
-					grid-template-columns: 1fr;
-				}
 			}
 
 			.post-nav {
@@ -230,7 +221,6 @@ if (id) {
 							)
 						}
 					</div>
-					<Sidebar />
 				</div>
 			</article>
 		</main>

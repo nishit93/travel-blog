@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import AboutTeaserImage from '../assets/blog-placeholder-about.jpg';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import PostCard from '../components/PostCard.astro';
 import { BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
@@ -13,8 +14,17 @@ const base = BASE_URL;
 
 const allPosts = await getCollection('blog');
 
-const latestPosts = [...allPosts]
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+const sortedPosts = [...allPosts].sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+
+// The newest post leads the page; the rails below it split travel from food.
+const featuredPost = sortedPosts[0];
+const travelPosts = sortedPosts
+	.filter((post) => post.id !== featuredPost?.id && post.data.category !== 'food')
+	.slice(0, 3);
+const foodPosts = sortedPosts
+	.filter((post) => post.id !== featuredPost?.id && post.data.category === 'food')
 	.slice(0, 3);
 
 const countryOrder: string[] = [];
@@ -50,54 +60,80 @@ const countries = countryOrder.map((country) => ({
 				padding: 0 1.5em;
 			}
 
-			.hero {
+			.site-tagline {
+				margin: 0;
+				padding: 1.3rem 1.5em;
+				text-align: center;
+				font-family: var(--font-mono);
+				font-size: 0.78rem;
+				letter-spacing: 0.07em;
+				text-transform: uppercase;
+				color: rgb(var(--gray));
+			}
+
+			.featured-link {
 				position: relative;
+				display: block;
+				height: min(52vh, 460px);
+				min-height: 320px;
 				overflow: hidden;
+				text-decoration: none;
 				background: rgb(var(--black));
 			}
-			.hero-content {
+			.featured-link :global(.featured-image) {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 0;
+			}
+			.featured-overlay {
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, rgba(20, 14, 10, 0.15) 30%, rgba(20, 14, 10, 0.82) 100%);
+			}
+			.featured-content {
 				position: relative;
 				z-index: 1;
-				max-width: 720px;
+				height: 100%;
+				max-width: 1080px;
 				margin: 0 auto;
-				padding: 3rem 1.5em;
+				padding: 0 1.5em 2.5rem;
 				display: flex;
 				flex-direction: column;
+				justify-content: flex-end;
 				color: #fff;
 			}
-			.hero-content .eyebrow {
+			.featured-content .eyebrow {
 				color: rgba(255, 255, 255, 0.8);
+				margin-bottom: 0.4rem;
 			}
-			.hero-content h1 {
-				font-size: clamp(2.4rem, 6vw, 3.6rem);
+			.featured-content h1 {
 				color: #fff;
-				margin: 0 0 0.6rem;
+				font-size: clamp(1.9rem, 4.5vw, 3rem);
+				margin: 0 0 0.5rem;
+				max-width: 22ch;
 			}
-			.hero-dek {
-				font-size: 1.15rem;
-				color: rgba(255, 255, 255, 0.9);
-				max-width: 56ch;
-				margin: 0 0 1.7rem;
-				line-height: 1.6;
+			.featured-meta {
+				font-family: var(--font-mono);
+				font-size: 0.78rem;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				color: rgba(255, 255, 255, 0.85);
+				margin: 0 0 1rem;
 			}
-			.hero-cta {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.4rem;
-				width: fit-content;
-				background: var(--accent);
+			.featured-cta {
+				font-family: var(--font-mono);
+				font-size: 0.85rem;
 				color: #fff;
-				padding: 0.75em 1.4em;
-				border-radius: 999px;
-				text-decoration: none;
-				font-weight: 600;
-				transition:
-					background 0.2s ease,
-					transform 0.2s ease;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+				padding-bottom: 2px;
+				align-self: flex-start;
+				transition: border-color 0.2s ease;
 			}
-			.hero-cta:hover {
-				background: var(--accent-dark);
-				transform: translateY(-1px);
+			.featured-link:hover .featured-cta {
+				border-bottom-color: #fff;
 			}
 
 			.countries {
@@ -232,38 +268,91 @@ const countries = countryOrder.map((country) => ({
 	<body>
 		<Header />
 		<main>
-			<section class="hero">
-				<div class="hero-content">
-					<p class="eyebrow">Travel journal</p>
-					<h1>{SITE_TITLE}</h1>
-					<p class="hero-dek">{SITE_DESCRIPTION}</p>
-					<a class="hero-cta" href={`${base}blog/`}>Read the latest stories →</a>
-				</div>
-			</section>
+			<p class="site-tagline">{SITE_DESCRIPTION}</p>
 
-			<section class="latest wrap">
-				<div class="section-head">
-					<div>
-						<p class="eyebrow">Recently published</p>
-						<h2>Latest stories</h2>
-					</div>
-					<a class="view-all" href={`${base}blog/`}>View all posts →</a>
-				</div>
-				<div class="post-grid">
-					{
-						latestPosts.map((post) => (
-							<PostCard
-								href={`${base}blog/${post.id}/`}
-								title={post.data.title}
-								description={post.data.description}
-								pubDate={post.data.pubDate}
-								heroImage={post.data.heroImage}
-								location={post.data.location}
-							/>
-						))
-					}
-				</div>
-			</section>
+			{
+				featuredPost && (
+					<section class="featured">
+						<a class="featured-link" href={`${base}blog/${featuredPost.id}/`}>
+							{featuredPost.data.heroImage && (
+								<Image
+									class="featured-image"
+									src={featuredPost.data.heroImage}
+									alt=""
+									width={1600}
+									height={900}
+								/>
+							)}
+							<div class="featured-overlay" />
+							<div class="featured-content">
+								<p class="eyebrow">Latest story</p>
+								<h1>{featuredPost.data.title}</h1>
+								<p class="featured-meta">
+									<FormattedDate date={featuredPost.data.pubDate} />
+									{featuredPost.data.location && <span>· {featuredPost.data.location}</span>}
+								</p>
+								<span class="featured-cta">Read the story →</span>
+							</div>
+						</a>
+					</section>
+				)
+			}
+
+			{
+				travelPosts.length > 0 && (
+					<section class="latest wrap">
+						<div class="section-head">
+							<div>
+								<p class="eyebrow">Recently published</p>
+								<h2>Latest stories</h2>
+							</div>
+							<a class="view-all" href={`${base}blog/`}>
+								View all posts →
+							</a>
+						</div>
+						<div class="post-grid">
+							{travelPosts.map((post) => (
+								<PostCard
+									href={`${base}blog/${post.id}/`}
+									title={post.data.title}
+									description={post.data.description}
+									pubDate={post.data.pubDate}
+									heroImage={post.data.heroImage}
+									location={post.data.location}
+								/>
+							))}
+						</div>
+					</section>
+				)
+			}
+
+			{
+				foodPosts.length > 0 && (
+					<section class="latest wrap">
+						<div class="section-head">
+							<div>
+								<p class="eyebrow">Worth the detour</p>
+								<h2>From the kitchen</h2>
+							</div>
+							<a class="view-all" href={`${base}food/`}>
+								All food posts →
+							</a>
+						</div>
+						<div class="post-grid">
+							{foodPosts.map((post) => (
+								<PostCard
+									href={`${base}blog/${post.id}/`}
+									title={post.data.title}
+									description={post.data.description}
+									pubDate={post.data.pubDate}
+									heroImage={post.data.heroImage}
+									location={post.data.location}
+								/>
+							))}
+						</div>
+					</section>
+				)
+			}
 
 			{
 				countries.length > 0 && (

@@ -22,6 +22,11 @@
 	--font-body: 'Source Sans 3', -apple-system, 'Segoe UI', sans-serif;
 	--font-mono: 'Space Mono', 'SFMono-Regular', Consolas, monospace;
 }
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
 body {
 	font-family: var(--font-body);
 	margin: 0;
