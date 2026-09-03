@@ -2,7 +2,7 @@
 title: 'Kutaisi in Two Days'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Aug 20 2022'
-heroImage: '../../assets/blog-placeholder-1.jpg'
+heroImage: '../../assets/blog-placeholder-5.jpg'
 location: 'Kutaisi, Georgia'
 country: 'Georgia'
 ---

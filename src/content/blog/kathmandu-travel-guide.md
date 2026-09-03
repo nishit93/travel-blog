@@ -2,7 +2,7 @@
 title: 'Kathmandu Travel Guide'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Apr 20 2023'
-heroImage: '../../assets/blog-placeholder-1.jpg'
+heroImage: '../../assets/blog-placeholder-4.jpg'
 location: 'Kathmandu, Nepal'
 country: 'Nepal'
 category: 'guide'

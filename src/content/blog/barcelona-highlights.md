@@ -2,7 +2,7 @@
 title: 'Barcelona Highlights'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Mar 08 2023'
-heroImage: '../../assets/blog-placeholder-1.jpg'
+heroImage: '../../assets/blog-placeholder-3.jpg'
 location: 'Barcelona, Spain'
 country: 'Spain'
 gallery:

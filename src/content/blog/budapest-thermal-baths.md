@@ -6,7 +6,7 @@ heroImage: '../../assets/blog-placeholder-3.jpg'
 location: 'Budapest, Hungary'
 country: 'Hungary'
 gallery:
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-4.jpg'
     alt: 'Steam over an outdoor thermal pool'
   - src: '../../assets/blog-placeholder-2.jpg'
     alt: 'View across the river at dusk'

@@ -8,7 +8,7 @@ country: 'Vietnam'
 gallery:
   - src: '../../assets/blog-placeholder-4.jpg'
     alt: 'Limestone karsts in the mist'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-3.jpg'
     alt: 'Fishing boat at anchor'
   - src: '../../assets/blog-placeholder-2.jpg'
     alt: 'Sunrise over the bay'

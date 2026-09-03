@@ -10,7 +10,7 @@ gallery:
     alt: 'Houseboats along a quiet canal'
   - src: '../../assets/blog-placeholder-4.jpg'
     alt: 'Bicycles lined up by a bridge'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-2.jpg'
     alt: 'Narrow canal houses at sunset'
 ---
 

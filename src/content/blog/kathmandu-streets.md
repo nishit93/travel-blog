@@ -8,7 +8,7 @@ country: 'Nepal'
 gallery:
   - src: '../../assets/blog-placeholder-3.jpg'
     alt: 'Prayer flags strung above a courtyard'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-4.jpg'
     alt: 'Narrow lane in Thamel'
   - src: '../../assets/blog-placeholder-5.jpg'
     alt: 'Temple bells at dusk'

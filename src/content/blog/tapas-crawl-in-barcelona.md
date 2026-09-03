@@ -7,7 +7,7 @@ location: 'Barcelona, Spain'
 country: 'Spain'
 category: 'food'
 gallery:
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-4.jpg'
     alt: 'Small plates lined up at the bar'
   - src: '../../assets/blog-placeholder-2.jpg'
     alt: 'Jamón hanging behind the counter'

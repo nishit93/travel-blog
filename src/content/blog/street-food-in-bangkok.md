@@ -11,7 +11,7 @@ gallery:
     alt: 'Wok smoking over a street stall'
   - src: '../../assets/blog-placeholder-5.jpg'
     alt: 'Skewers on the grill'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-3.jpg'
     alt: 'Night market stools and tables'
 ---
 

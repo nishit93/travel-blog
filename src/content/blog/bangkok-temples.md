@@ -10,7 +10,7 @@ gallery:
     alt: 'Golden spires at a riverside temple'
   - src: '../../assets/blog-placeholder-5.jpg'
     alt: 'Incense smoke curling upward'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-4.jpg'
     alt: 'Longtail boats on the river'
 ---
 

@@ -10,7 +10,7 @@ gallery:
     alt: 'Harbour at golden hour'
   - src: '../../assets/blog-placeholder-4.jpg'
     alt: 'Coastal walk along the cliffs'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-3.jpg'
     alt: 'Ferry crossing the harbour'
   - src: '../../assets/blog-placeholder-3.jpg'
     alt: 'Sunset over the bay'

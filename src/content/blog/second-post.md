@@ -8,7 +8,7 @@ country: 'Georgia'
 gallery:
   - src: '../../assets/blog-placeholder-2.jpg'
     alt: 'Balconies of the old town'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-5.jpg'
     alt: 'Cable car above the city'
   - src: '../../assets/blog-placeholder-3.jpg'
     alt: 'Sunset over Narikala Fortress'

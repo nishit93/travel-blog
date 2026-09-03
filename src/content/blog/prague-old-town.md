@@ -10,7 +10,7 @@ gallery:
     alt: 'Cobblestone lanes near the old square'
   - src: '../../assets/blog-placeholder-3.jpg'
     alt: 'Rooftops along the river'
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-5.jpg'
     alt: 'Astronomical clock crowd at noon'
 ---
 

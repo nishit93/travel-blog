@@ -6,7 +6,7 @@ heroImage: '../../assets/blog-placeholder-3.jpg'
 location: 'Thimphu, Bhutan'
 country: 'Bhutan'
 gallery:
-  - src: '../../assets/blog-placeholder-1.jpg'
+  - src: '../../assets/blog-placeholder-2.jpg'
     alt: 'Prayer flags above the valley'
   - src: '../../assets/blog-placeholder-5.jpg'
     alt: 'Courtyard of a hillside dzong'
