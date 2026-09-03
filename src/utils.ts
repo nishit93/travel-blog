@@ -11,6 +11,7 @@ export const REGIONS: Record<string, string[]> = {
 	Asia: ['Bhutan', 'Georgia', 'Nepal', 'Vietnam', 'Thailand'],
 	Europe: ['Hungary', 'Czech Republic', 'Netherlands', 'Spain'],
 	Oceania: ['Australia'],
+	India: ['Varanasi', 'Jaisalmer', 'Bhimtal', 'Dalhousie'],
 };
 
 export function regionFor(country: string): string {
