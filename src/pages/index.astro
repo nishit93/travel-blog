@@ -241,23 +241,6 @@ const countries = countryOrder.map((country) => ({
 				</div>
 			</section>
 
-			{
-				countries.length > 0 && (
-					<section class="countries wrap">
-						<p class="eyebrow">Browse by destination</p>
-						<h2>Countries</h2>
-						<div class="countries-grid">
-							{countries.map(({ country, heroImage }) => (
-								<a class="country-card" href={`${base}country/${slugify(country)}/`}>
-									{heroImage && <Image src={heroImage} alt="" width={400} height={500} />}
-									<span class="country-name">{country}</span>
-								</a>
-							))}
-						</div>
-					</section>
-				)
-			}
-
 			<section class="latest wrap">
 				<div class="section-head">
 					<div>
@@ -281,6 +264,23 @@ const countries = countryOrder.map((country) => ({
 					}
 				</div>
 			</section>
+
+			{
+				countries.length > 0 && (
+					<section class="countries wrap">
+						<p class="eyebrow">Browse by destination</p>
+						<h2>Countries</h2>
+						<div class="countries-grid">
+							{countries.map(({ country, heroImage }) => (
+								<a class="country-card" href={`${base}country/${slugify(country)}/`}>
+									{heroImage && <Image src={heroImage} alt="" width={400} height={500} />}
+									<span class="country-name">{country}</span>
+								</a>
+							))}
+						</div>
+					</section>
+				)
+			}
 
 			<section class="about-teaser wrap">
 				<div class="about-photo-wrap">
