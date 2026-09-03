@@ -111,21 +111,26 @@ const countries = countryOrder.map((country) => ({
 				font-size: 1.9rem;
 				margin: 0 0 1.5rem;
 			}
-			.countries-scroll {
-				display: flex;
+			.countries-grid {
+				display: grid;
+				grid-template-columns: repeat(5, 1fr);
 				gap: 1rem;
-				overflow-x: auto;
-				scroll-snap-type: x mandatory;
-				padding-bottom: 0.75rem;
-				scrollbar-width: thin;
+			}
+			@media (max-width: 860px) {
+				.countries-grid {
+					grid-template-columns: repeat(3, 1fr);
+				}
+			}
+			@media (max-width: 560px) {
+				.countries-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
 			}
 			.country-card {
 				position: relative;
-				flex: 0 0 210px;
-				height: 270px;
+				aspect-ratio: 4 / 5;
 				border-radius: 14px;
 				overflow: hidden;
-				scroll-snap-align: start;
 				text-decoration: none;
 				transition: transform 0.2s ease;
 			}
@@ -245,7 +250,7 @@ const countries = countryOrder.map((country) => ({
 					<section class="countries wrap">
 						<p class="eyebrow">Browse by destination</p>
 						<h2>Countries</h2>
-						<div class="countries-scroll">
+						<div class="countries-grid">
 							{countries.map(({ country, heroImage }) => (
 								<a class="country-card" href={`${base}country/${slugify(country)}/`}>
 									{heroImage && <Image src={heroImage} alt="" width={400} height={500} />}
