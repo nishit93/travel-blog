@@ -1,0 +1,147 @@
+---
+interface Props {
+	postId: string;
+	url: string;
+}
+
+const { postId, url } = Astro.props;
+---
+
+<div class="post-actions" data-post-id={postId} data-url={url}>
+	<button type="button" class="action-btn" data-action="like" aria-pressed="false">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+		</svg>
+		<span class="label">Like</span>
+	</button>
+	<button type="button" class="action-btn" data-action="dislike" aria-pressed="false">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zM17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path>
+		</svg>
+		<span class="label">Dislike</span>
+	</button>
+	<button type="button" class="action-btn" data-action="share">
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<circle cx="18" cy="5" r="3"></circle>
+			<circle cx="6" cy="12" r="3"></circle>
+			<circle cx="18" cy="19" r="3"></circle>
+			<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+			<line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+		</svg>
+		<span class="label">Share</span>
+	</button>
+</div>
+
+<style>
+	.post-actions {
+		display: flex;
+		justify-content: center;
+		gap: 0.6rem;
+		margin: 0 0 2rem;
+	}
+	.action-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		padding: 0.5em 0.9em;
+		border: 1px solid rgba(var(--black), 12%);
+		border-radius: 999px;
+		background: var(--surface);
+		color: rgb(var(--gray-dark));
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		cursor: pointer;
+		transition:
+			border-color 0.15s ease,
+			color 0.15s ease,
+			background 0.15s ease;
+	}
+	.action-btn svg {
+		width: 15px;
+		height: 15px;
+	}
+	.action-btn:hover {
+		border-color: rgba(var(--black), 24%);
+	}
+	.action-btn.active {
+		border-color: var(--accent);
+		color: var(--accent);
+		background: rgba(184, 75, 54, 0.08);
+	}
+</style>
+
+<script>
+	function initPostActions() {
+		const container = document.querySelector<HTMLElement>('.post-actions');
+		if (!container) return;
+
+		const postId = container.dataset.postId ?? '';
+		const url = container.dataset.url ?? '';
+		const storageKey = `reaction:${postId}`;
+
+		const likeBtn = container.querySelector<HTMLButtonElement>('[data-action="like"]');
+		const dislikeBtn = container.querySelector<HTMLButtonElement>('[data-action="dislike"]');
+		const shareBtn = container.querySelector<HTMLButtonElement>('[data-action="share"]');
+
+		function getReaction(): string | null {
+			try {
+				return localStorage.getItem(storageKey);
+			} catch {
+				return null;
+			}
+		}
+
+		function applyState() {
+			const state = getReaction();
+			likeBtn?.classList.toggle('active', state === 'like');
+			likeBtn?.setAttribute('aria-pressed', String(state === 'like'));
+			dislikeBtn?.classList.toggle('active', state === 'dislike');
+			dislikeBtn?.setAttribute('aria-pressed', String(state === 'dislike'));
+		}
+
+		function setReaction(next: 'like' | 'dislike') {
+			try {
+				const current = getReaction();
+				if (current === next) {
+					localStorage.removeItem(storageKey);
+				} else {
+					localStorage.setItem(storageKey, next);
+				}
+			} catch {
+				// localStorage unavailable (e.g. private browsing) - reaction just won't persist
+			}
+			applyState();
+		}
+
+		applyState();
+		likeBtn?.addEventListener('click', () => setReaction('like'));
+		dislikeBtn?.addEventListener('click', () => setReaction('dislike'));
+
+		shareBtn?.addEventListener('click', async () => {
+			const shareData = { title: document.title, url };
+			if (navigator.share) {
+				try {
+					await navigator.share(shareData);
+				} catch {
+					// user cancelled the native share sheet - nothing to do
+				}
+				return;
+			}
+			const label = shareBtn.querySelector<HTMLElement>('.label');
+			try {
+				await navigator.clipboard.writeText(url);
+				if (label) {
+					const original = label.textContent;
+					label.textContent = 'Copied!';
+					setTimeout(() => {
+						label.textContent = original;
+					}, 1800);
+				}
+			} catch {
+				// clipboard API unavailable - nothing more we can do
+			}
+		});
+	}
+
+	initPostActions();
+</script>
